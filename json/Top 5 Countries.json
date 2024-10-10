@@ -1,0 +1,155 @@
+{
+    "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+    "title": {"text": "The 5 Countries with the Largest Unemployment Rate Increase from 1991 to 2021", "fontSize": 16, "fontWeight": "bold"},
+    "background": "whitesmoke",
+    "width": 800,
+    "height": 500,
+
+    "data": {
+        "url": "https://raw.githubusercontent.com/Jaydenyap02/3179asgm2/refs/heads/main/data/unemployment%20analysis.csv"
+    },
+
+    "transform": [
+        {
+            "calculate": "datum['2021'] - datum['1991']",
+            "as": "unemployment_increased"
+        },
+        {
+            "window": [
+                {
+                    "op": "rank",
+                    "as": "rank"
+                }
+            ],
+            "sort": [{"field": "unemployment_increased", "order": "descending"}]
+        },
+        {
+            "filter": "datum.rank <= 5"
+        },
+        {
+            "fold": ["1991", "2021"],
+            "as": ["year", "unemployment_rate"]
+        }
+    ],
+
+    "encoding": {
+        "x": {
+            "field": "unemployment_rate",
+            "type": "quantitative",
+            "scale": {"domain": [0, 30]},  
+            "axis": {
+                "title": "Unemployment Rate (%)",
+                "titleFontWeight": "bold",
+                "titleFontSize": 13,
+                "labelFontSize": 11
+            }
+        },
+        "y": {
+            "field": "Country Name",
+            "type": "nominal",
+            "axis": {
+                "offset": 10,
+                "ticks": false,
+                "domain": false,
+                "title": "Country",
+                "titleFontWeight": "bold",
+                "titleFontSize": 13,
+                "labelFontSize": 11
+            },
+            "sort": {"field": "rank", "order": "ascending"}
+        }
+    },
+    "layer": [
+        {
+            "mark": "line",
+            "encoding": {
+                "detail": {
+                    "field": "Country Name",
+                    "type": "nominal"
+                },
+                "color": {"value": "#3182bd"}
+            }
+        },
+        {
+            "transform": [
+                {
+                    "filter": "datum.year == '2021'"
+                }
+            ],
+            "mark": {
+                "type": "text",
+                "baseline": "middle",
+                "align": "left",
+                "dx": -135,
+                "dy": -8,
+                "fontSize": 11,
+                "fontWeight": "bold"
+            },
+            "encoding": {
+                "text": {
+                    "field": "unemployment_increased",
+                    "type": "quantitative",
+                    "format": ".1f"
+                },
+                "tooltip": [
+                    {"field": "unemployment_increased", "type": "quantitative", "format": ".1f", "title": "Increase in Unemployment Rate (percentage points)"}
+                ]
+            }
+        },
+        {
+            "mark": {
+                "type": "point",
+                "filled": true,
+                "size": 150
+            },
+            "encoding": {
+                "color": {
+                    "field": "year",
+                    "type": "ordinal",
+                    "scale": {"range": ["#6baed6", "#08519c"]},
+                    "legend": {
+                        "title": "Year",
+                        "titleFontSize": 12,
+                        "labelFontSize": 11
+                    }
+                },
+                "tooltip": [
+                    {"field": "Country Name", "type": "nominal", "title": "Country"},
+                    {"field": "year", "type": "nominal", "title": "Year"},
+                    {"field": "unemployment_rate", "type": "quantitative", "format": ".1f", "title": "Unemployment Rate (%)"}
+                ],
+                "opacity": {"value": 1}
+            }
+        },
+        {
+            "mark": {
+                "type": "text",
+                "align": "left",
+                "fontWeight": 600,
+                "lineBreak": "\n"
+            },
+            "encoding": {
+                "text": { "value": "In the last 30 years, Country Armenia has seen the greatest increase in unemployment."},
+                "color": { "value": "grey"},
+                "size": {"value": 11},
+                "x": { "value": 10},
+                "y": { "value": 65}
+            }
+        },
+        {
+            "mark": {
+                "type": "text",
+                "align": "left",
+                "fontWeight": 600,
+                "lineBreak": "\n"
+            },
+            "encoding": {
+                "text": { "value": "Of the top 5 countries, Country Panama unemployment rate grew at the slowest pace."},
+                "color": { "value": "grey"},
+                "size": {"value": 11},
+                "x": { "value": 10},
+                "y": { "value": 430}
+            }
+        }
+    ]
+}
