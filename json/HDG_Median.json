@@ -133,7 +133,7 @@
             "field": "Continent", 
             "type": "nominal",
             "scale":{
-              "range": ["#4daf4a", "#377eb8", "#e41a1c", "#984ea3", "#ff7f00"]
+              "range": ["#8B4513", "#377eb8", "#e41a1c", "#984ea3", "#ff7f00"]
             },
             "legend": {
                 "title": "Continent",
